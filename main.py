@@ -1,10 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import random
 import asyncio
+import tempfile
+import os
 from HalalOpenAi import create_client, generate_sharia_advice
+from whisper import transcribe_audio
 
 app = FastAPI()
 
@@ -93,6 +96,37 @@ async def get_personal_data_page():
 @app.get("/auth")
 async def get_auth_page():
     return FileResponse("frontend/auth.html")
+
+# Whisper AI endpoint for voice transcription
+@app.post("/transcribe")
+async def transcribe_voice(audio: UploadFile = File(...)):
+    try:
+        # Check if file is audio
+        if not audio.content_type or not audio.content_type.startswith('audio/'):
+            raise HTTPException(status_code=400, detail="File must be an audio file")
+        
+        # Create temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_file:
+            content = await audio.read()
+            temp_file.write(content)
+            temp_file_path = temp_file.name
+        
+        try:
+            # Transcribe audio
+            text = transcribe_audio(temp_file_path, language="ru", filter_false=True)
+            
+            if text:
+                return {"success": True, "text": text}
+            else:
+                return {"success": False, "text": "", "error": "No speech detected"}
+                
+        finally:
+            # Clean up temporary file
+            if os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
+                
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
 
 # Real AI endpoint using HalalOpenAi
 @app.get("/chat")

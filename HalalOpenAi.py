@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from openai import OpenAI
+from dotenv import load_dotenv
 import os
 import sys
 
+load_dotenv()
 # API Configuration
-API_KEY = "sk-roG3OusRr0TLCHAADks6lw"
+API_KEY = os.getenv("TOKEN")
 BASE_URL = "https://openai-hub.neuraldeep.tech/v1"
 
 def create_client():

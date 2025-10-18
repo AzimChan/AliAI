@@ -199,7 +199,7 @@
                             <i class="fas ${sender === 'user' ? 'fa-user' : 'fa-robot'} text-white text-sm"></i>
                         </div>
                         <div class="bg-${sender === 'user' ? 'primary' : 'gray-100'} text-${sender === 'user' ? 'white' : 'gray-800'} rounded-lg p-3 message-bubble">
-                            <p>${this.escapeHtml(text)}</p>
+                            <div class="prose prose-sm max-w-none">${text}</div>
                             <span class="text-xs ${sender === 'user' ? 'text-blue-100' : 'text-gray-500'} mt-1 block">${timeString}</span>
                         </div>
                     </div>

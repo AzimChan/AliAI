@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Депозит - Zaman Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D9A86',
+                        secondary: '#EEFE6D',
+                        accent: '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .deposit-card {
+            background: linear-gradient(135deg, #2D9A86, #EEFE6D);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        .progress-bar {
+            animation: progress 3s ease-in-out;
+        }
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <i class="fas fa-piggy-bank text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Zaman Bank</h1>
+                        <p class="text-sm text-gray-500">Исламские депозиты</p>
+                    </div>
+                </div>
+                <a href="/" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Назад к чату
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Deposit Calculator -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-calculator mr-2 text-primary"></i>Калькулятор депозита
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Input Form -->
+                <div>
+                    <form id="depositForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Сумма депозита (тенге)</label>
+                            <input type="number" id="amount" placeholder="1000000" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Срок депозита</label>
+                            <select id="term" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="3">3 месяца</option>
+                                <option value="6">6 месяцев</option>
+                                <option value="12" selected>12 месяцев</option>
+                                <option value="24">24 месяца</option>
+                                <option value="36">36 месяцев</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Тип депозита</label>
+                            <select id="type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="mudarabah">Мудараба (прибыль)</option>
+                                <option value="musharakah">Мушарака (партнерство)</option>
+                                <option value="wakalah">Вакала (доверительное управление)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                            <i class="fas fa-calculator mr-2"></i>Рассчитать доходность
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Results -->
+                <div>
+                    <div id="results" class="hidden">
+                        <div class="deposit-card rounded-lg p-6 text-white mb-6">
+                            <h3 class="text-xl font-bold mb-4">Прогнозируемая доходность</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span>Сумма депозита:</span>
+                                    <span id="depositAmount" class="font-bold">0 ₸</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Ожидаемая прибыль:</span>
+                                    <span id="expectedProfit" class="font-bold">0 ₸</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Общая сумма:</span>
+                                    <span id="totalAmount" class="font-bold text-lg">0 ₸</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">
+                                <i class="fas fa-check-circle mr-2"></i>Соответствует принципам Шариата
+                            </h4>
+                            <p class="text-sm text-green-700">Депозит основан на исламских принципах партнерства и справедливого распределения прибыли.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deposit Types -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Мудараба</h3>
+                    <p class="text-sm text-gray-600 mb-4">Партнерство, где банк управляет вашими средствами и делит прибыль</p>
+                    <div class="text-primary font-bold">До 12% годовых</div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-gray-800 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Мушарака</h3>
+                    <p class="text-sm text-gray-600 mb-4">Совместное партнерство в инвестиционных проектах</p>
+                    <div class="text-primary font-bold">До 15% годовых</div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-tie text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Вакала</h3>
+                    <p class="text-sm text-gray-600 mb-4">Доверительное управление вашими средствами</p>
+                    <div class="text-primary font-bold">До 10% годовых</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Steps -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-list-ol mr-2 text-primary"></i>Как открыть депозит
+            </h3>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 text-lg font-bold">1</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Выберите тип</h4>
+                    <p class="text-sm text-gray-600">Выберите подходящий тип исламского депозита</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 text-lg font-bold">2</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Рассчитайте</h4>
+                    <p class="text-sm text-gray-600">Используйте калькулятор для расчета доходности</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 text-lg font-bold">3</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Подайте заявку</h4>
+                    <p class="text-sm text-gray-600">Заполните заявку на открытие депозита</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-3 text-lg font-bold">4</div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Получите доход</h4>
+                    <p class="text-sm text-gray-600">Получайте справедливую прибыль по Шариату</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('depositForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const term = parseInt(document.getElementById('term').value);
+            const type = document.getElementById('type').value;
+            
+            // Calculate profit based on type and term
+            let rate = 0;
+            switch(type) {
+                case 'mudarabah':
+                    rate = 0.12; // 12%
+                    break;
+                case 'musharakah':
+                    rate = 0.15; // 15%
+                    break;
+                case 'wakalah':
+                    rate = 0.10; // 10%
+                    break;
+            }
+            
+            // Adjust rate based on term
+            rate = rate * (term / 12);
+            
+            const profit = amount * rate;
+            const total = amount + profit;
+            
+            // Update results
+            document.getElementById('depositAmount').textContent = amount.toLocaleString() + ' ₸';
+            document.getElementById('expectedProfit').textContent = profit.toLocaleString() + ' ₸';
+            document.getElementById('totalAmount').textContent = total.toLocaleString() + ' ₸';
+            
+            // Show results
+            document.getElementById('results').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

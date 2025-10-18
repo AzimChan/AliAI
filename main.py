@@ -77,10 +77,46 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 async def get_index():
     return FileResponse("frontend/index.html")
 
+# Fake pages for redirection
+@app.get("/qr")
+async def get_qr_page():
+    return FileResponse("frontend/qr.html")
+
+@app.get("/deposit")
+async def get_deposit_page():
+    return FileResponse("frontend/deposit.html")
+
+@app.get("/personal-data")
+async def get_personal_data_page():
+    return FileResponse("frontend/personal-data.html")
+
+@app.get("/auth")
+async def get_auth_page():
+    return FileResponse("frontend/auth.html")
+
 # Real AI endpoint using HalalOpenAi
 @app.get("/chat")
 async def get_ai_response(message: str):
     try:
+        # Check if message contains keywords that should redirect to fake pages
+        message_lower = message.lower()
+        
+        # Keywords for different fake pages
+        qr_keywords = ['qr', 'кьюар', 'код', 'сканировать', 'сканирование', 'штрих', 'штрихкод']
+        deposit_keywords = ['депозит', 'вклад', 'накопить', 'сбережения', 'процент', 'доходность', 'инвестиции']
+        personal_data_keywords = ['данные', 'персональные', 'информация', 'профиль', 'личные', 'конфиденциальность']
+        auth_keywords = ['войти', 'авторизация', 'логин', 'пароль', 'вход', 'регистрация', 'аккаунт']
+        
+        # Check for redirect keywords
+        if any(keyword in message_lower for keyword in qr_keywords):
+            return {"response": "Для работы с QR-кодами перейдите по ссылке: <a href='/qr' target='_blank' class='text-primary hover:underline'>Открыть QR-генератор</a>", "redirect": "/qr"}
+        elif any(keyword in message_lower for keyword in deposit_keywords):
+            return {"response": "Для открытия депозита перейдите по ссылке: <a href='/deposit' target='_blank' class='text-primary hover:underline'>Калькулятор депозитов</a>", "redirect": "/deposit"}
+        elif any(keyword in message_lower for keyword in personal_data_keywords):
+            return {"response": "Для управления персональными данными перейдите по ссылке: <a href='/personal-data' target='_blank' class='text-primary hover:underline'>Управление данными</a>", "redirect": "/personal-data"}
+        elif any(keyword in message_lower for keyword in auth_keywords):
+            return {"response": "Для авторизации в системе перейдите по ссылке: <a href='/auth' target='_blank' class='text-primary hover:underline'>Вход в систему</a>", "redirect": "/auth"}
+        
         # Use the real AI to generate response
         response = generate_sharia_advice(message, conversation_history, ai_client)
         return {"response": response}

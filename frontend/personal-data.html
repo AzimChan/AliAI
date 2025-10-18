@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Персональные данные - Zaman Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D9A86',
+                        secondary: '#EEFE6D',
+                        accent: '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .security-badge {
+            background: linear-gradient(135deg, #2D9A86, #EEFE6D);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(45, 154, 134, 0.3); }
+            to { box-shadow: 0 0 20px rgba(45, 154, 134, 0.6); }
+        }
+        .data-item {
+            transition: all 0.3s ease;
+        }
+        .data-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-shield text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Zaman Bank</h1>
+                        <p class="text-sm text-gray-500">Управление персональными данными</p>
+                    </div>
+                </div>
+                <a href="/" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Назад к чату
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Security Status -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-shield-alt mr-2 text-green-500"></i>Статус безопасности
+                </h2>
+                <div class="security-badge px-4 py-2 rounded-full text-white font-semibold">
+                    <i class="fas fa-lock mr-2"></i>Защищено
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+                    <div class="text-sm font-semibold text-green-800">Шифрование</div>
+                    <div class="text-xs text-green-600">AES-256</div>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+                    <div class="text-sm font-semibold text-green-800">Двухфакторная аутентификация</div>
+                    <div class="text-xs text-green-600">Активна</div>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+                    <div class="text-sm font-semibold text-green-800">Мониторинг</div>
+                    <div class="text-xs text-green-600">24/7</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Data Overview -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-user-circle mr-2 text-primary"></i>Ваши персональные данные
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Basic Information -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Основная информация</h3>
+                    <div class="space-y-3">
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Имя</div>
+                                    <div class="text-gray-800">Иван Иванов</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">ИИН</div>
+                                    <div class="text-gray-800">123456789012</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Телефон</div>
+                                    <div class="text-gray-800">+7 (777) 123-45-67</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Email</div>
+                                    <div class="text-gray-800">ivan@example.com</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Address Information -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Адресная информация</h3>
+                    <div class="space-y-3">
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Адрес регистрации</div>
+                                    <div class="text-gray-800">г. Алматы, ул. Абая 1</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Место работы</div>
+                                    <div class="text-gray-800">ТОО "Пример"</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Должность</div>
+                                    <div class="text-gray-800">Менеджер</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-item bg-gray-50 rounded-lg p-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-500">Доход</div>
+                                    <div class="text-gray-800">500,000 - 1,000,000 ₸</div>
+                                </div>
+                                <button class="text-primary hover:text-opacity-80">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Management Actions -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-download mr-2 text-primary"></i>Экспорт данных
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">Скачайте копию всех ваших персональных данных</p>
+                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-file-export mr-2"></i>Скачать данные
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    <i class="fas fa-trash mr-2 text-red-500"></i>Удаление данных
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">Запросить удаление всех персональных данных</p>
+                <button class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Запросить удаление
+                </button>
+            </div>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="bg-blue-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-800 mb-4">
+                <i class="fas fa-shield-alt mr-2"></i>Политика конфиденциальности
+            </h3>
+            <div class="text-sm text-blue-700 space-y-2">
+                <p>• Мы используем ваши данные только для предоставления банковских услуг</p>
+                <p>• Ваши данные защищены современными методами шифрования</p>
+                <p>• Мы не передаем ваши данные третьим лицам без вашего согласия</p>
+                <p>• Вы можете в любое время запросить изменение или удаление данных</p>
+                <p>• Мы соблюдаем все требования законодательства РК о защите персональных данных</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers for edit buttons
+            document.querySelectorAll('.data-item button').forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Функция редактирования будет доступна в ближайшее время');
+                });
+            });
+            
+            // Add click handlers for action buttons
+            document.querySelectorAll('button').forEach(button => {
+                if (button.textContent.includes('Скачать данные')) {
+                    button.addEventListener('click', function() {
+                        alert('Экспорт данных будет выполнен в течение 24 часов');
+                    });
+                }
+                
+                if (button.textContent.includes('Запросить удаление')) {
+                    button.addEventListener('click', function() {
+                        if (confirm('Вы уверены, что хотите запросить удаление всех данных? Это действие необратимо.')) {
+                            alert('Запрос на удаление данных отправлен. Мы свяжемся с вами в течение 48 часов.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

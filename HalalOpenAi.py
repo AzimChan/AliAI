@@ -2,89 +2,117 @@
 from openai import OpenAI
 import os
 import sys
-api_key_value = "sk-roG3OusRr0TLCHAADks6lw"
-BANK_BASE_URL = "https://openai-hub.neuraldeep.tech/v1"
-# The client automatically uses the OPENAI_API_KEY environment variable
-from openai import OpenAI
 
-BANK_ROUTER_KEY = "sk-роутер_банка_ключ"
-BANK_BASE_URL = "https://openai-hub.neuraldeep.tech/v1" 
+# API Configuration
+API_KEY = "sk-roG3OusRr0TLCHAADks6lw"
+BASE_URL = "https://openai-hub.neuraldeep.tech/v1"
 
-client = OpenAI(
-    api_key=BANK_ROUTER_KEY,
-    base_url=BANK_BASE_URL,
-) 
-
-def generate_sharia_advice(user_prompt: str, history: list) -> str:
-    # 1. Добавляем новый запрос пользователя в историю
-    history.append(
-        {"role": "user", "content": user_prompt}
+def create_client():
+    """Create OpenAI client with current configuration"""
+    return OpenAI(
+        api_key=API_KEY,
+        base_url=BASE_URL,
     )
+
+def generate_sharia_advice(user_prompt: str, history: list, client) -> str:
+    """Generate Sharia-compliant financial advice"""
+    # Add user message to history
+    history.append({"role": "user", "content": user_prompt})
     
-    # 2. Отправляем всю историю в API
+    # Send request to API
     response = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=history  # <--- Ключевой шаг для сохранения контекста!
+        messages=history
     )
     
-    # Получаем ответ
+    # Get response
     assistant_response = response.choices[0].message.content
     
-    # 3. Сохраняем ответ ИИ в историю
-    history.append(
-        {"role": "assistant", "content": assistant_response}
-    )
+    # Save response to history
+    history.append({"role": "assistant", "content": assistant_response})
     
     return assistant_response
 
-conversation_history = [
-    {"role": "system", "content": "Вы — финансовый консультант Zaman Bank, Исламского банка. Предоставляйте советы в соответствии с принципами шариата и исламского банкинга."}
-]
+def test_api_connection(client):
+    """Test API connection"""
+    try:
+        print("Testing API connection...")
+        print(f"Using API key: {API_KEY[:10]}...")
+        print(f"Using base URL: {BASE_URL}")
+        
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "Hello"}],
+            max_tokens=10
+        )
+        print("API connection successful!")
+        return True
+    except Exception as e:
+        print(f"API connection failed: {e}")
+        return False
 
 def main():
-    # Настройка кодировки для Windows
-    if sys.platform.startswith('win'):
-        import codecs
-        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
-        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
-    
-    print("Добро пожаловать в Zaman Bank - Исламский банк!")
-    print("Я ваш финансовый консультант. Задавайте вопросы о банковских услугах.")
-    print("Для выхода введите 'выход' или 'exit'")
+    print("Welcome to Zaman Bank - Islamic Bank!")
+    print("I am your financial consultant. Ask questions about banking services.")
+    print("To exit, type 'exit' or 'quit'")
     print("-" * 50)
     
+    # Create client
+    client = create_client()
+    
+    # Test connection
+    if not test_api_connection(client):
+        print("Please check your API key and network connection.")
+        print("The API key might be invalid or expired.")
+        
+        # Ask for new API key
+        new_key = input("\nEnter your API key (or press Enter to exit): ").strip()
+        if new_key:
+            global API_KEY
+            API_KEY = new_key
+            client = create_client()
+            if not test_api_connection(client):
+                print("Still failed. Exiting...")
+                return
+        else:
+            print("Exiting...")
+            return
+    
+    # Initialize conversation
+    conversation_history = [
+        {"role": "system", "content": "You are a financial consultant for Zaman Bank, an Islamic bank. Provide advice in accordance with Sharia principles and Islamic banking."}
+    ]
+    
+    # Main conversation loop
     while True:
         try:
-            # Получаем ввод от пользователя
-            user_input = input("\nВаш вопрос: ").strip()
+            # Get user input
+            user_input = input("\nYour question: ").strip()
             
-            # Проверяем команды выхода
-            if user_input.lower() in ['выход', 'exit', 'quit', 'q']:
-                print("До свидания! Спасибо за обращение в Zaman Bank.")
+            # Check exit commands
+            if user_input.lower() in ['exit', 'quit', 'q']:
+                print("Goodbye! Thank you for using Zaman Bank.")
                 break
             
-            # Проверяем, что пользователь ввел что-то
+            # Check if user entered something
             if not user_input:
-                print("Пожалуйста, введите ваш вопрос.")
+                print("Please enter your question.")
                 continue
             
-            # Получаем ответ от ИИ
-            print("\nОбрабатываю ваш запрос...")
-            response = generate_sharia_advice(user_input, conversation_history)
+            # Get AI response
+            print("\nProcessing your request...")
+            response = generate_sharia_advice(user_input, conversation_history, client)
             
-            # Выводим ответ
-            print(f"\nКонсультант Zaman Bank:\n{response}")
+            # Display response
+            print(f"\nZaman Bank Consultant:\n{response}")
             
         except KeyboardInterrupt:
-            print("\n\nПрограмма прервана пользователем.")
+            print("\n\nProgram interrupted by user.")
             break
         except Exception as e:
-            print(f"\nПроизошла ошибка: {e}")
-            print("Попробуйте еще раз.")
+            print(f"\nAn error occurred: {e}")
+            print(f"Error type: {type(e).__name__}")
+            print("Please try again.")
 
 if __name__ == "__main__":
-    # Устанавливаем кодировку для Windows
-    if sys.platform.startswith('win'):
-        os.environ['PYTHONIOENCODING'] = 'utf-8'
-    
     main()

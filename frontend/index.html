@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        secondary: '#1E40AF',
-                        accent: '#10B981',
+                        primary: '#2D9A86',
+                        secondary: '#EEFE6D',
+                        accent: '#FFFFFF',
                     }
                 }
             }
@@ -23,32 +24,46 @@
         .chat-container {
             height: calc(100vh - 120px);
         }
+
         .message-bubble {
             max-width: 80%;
             word-wrap: break-word;
         }
+
         .typing-indicator {
             display: none;
         }
+
         .typing-indicator.show {
             display: block;
         }
+
         .fade-in {
             animation: fadeIn 0.3s ease-in;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
     <!-- Header -->
     <header class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-4xl mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
                         <i class="fas fa-robot text-white text-lg"></i>
                     </div>
                     <div>
@@ -56,7 +71,9 @@
                         <p class="text-sm text-gray-500">Исламский банк - AI Консультант</p>
                     </div>
                 </div>
-                <button id="clearChat" class="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Clear conversation">
+                <button id="clearChat"
+                    class="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Clear conversation">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
@@ -65,16 +82,19 @@
 
     <!-- Chat Container -->
     <main class="max-w-4xl mx-auto px-4 py-6">
-        <div id="chatContainer" class="chat-container bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div id="chatContainer"
+            class="chat-container bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div id="messages" class="h-full overflow-y-auto p-4 space-y-4">
                 <!-- Welcome Message -->
                 <div class="message-bubble fade-in">
                     <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                        <div
+                            class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-robot text-white text-sm"></i>
                         </div>
                         <div class="bg-gray-100 rounded-lg p-3 message-bubble">
-                            <p class="text-gray-800">Ассаламу алейкум! Я ваш финансовый консультант банка Zaman Bank. Как я могу помочь вам с банковскими услугами?</p>
+                            <p class="text-gray-800">Ассаламу алейкум! Я ваш финансовый консультант банка Zaman Bank.
+                                Как я могу помочь вам с банковскими услугами?</p>
                             <span class="text-xs text-gray-500 mt-1 block">Только что</span>
                         </div>
                     </div>
@@ -83,16 +103,20 @@
         </div>
 
         <!-- Typing Indicator -->
-        <div id="typingIndicator" class="typing-indicator bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-4">
+        <div id="typingIndicator"
+            class="typing-indicator bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-4">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                <div
+                    class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
                     <i class="fas fa-robot text-white text-sm"></i>
                 </div>
                 <div class="bg-gray-100 rounded-lg p-3">
                     <div class="flex space-x-1">
                         <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s">
+                        </div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,17 +125,11 @@
         <!-- Input Area -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-4">
             <div class="flex space-x-3">
-                <input 
-                    type="text" 
-                    id="messageInput" 
-                    placeholder="Type your message here..." 
+                <input type="text" id="messageInput" placeholder="Type your message here..."
                     class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    autocomplete="off"
-                >
-                <button 
-                    id="sendButton" 
-                    class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                    autocomplete="off">
+                <button id="sendButton"
+                    class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -168,9 +186,9 @@
 
             addMessage(text, sender) {
                 const messageId = Date.now();
-                const timeString = new Date().toLocaleTimeString([], { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                const timeString = new Date().toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
                 });
 
                 const messageElement = document.createElement('div');
@@ -195,7 +213,7 @@
                 this.isTyping = typing;
                 this.sendButton.disabled = typing;
                 this.messageInput.disabled = typing;
-                
+
                 if (typing) {
                     this.typingIndicator.classList.add('show');
                 } else {
@@ -249,4 +267,5 @@
         });
     </script>
 </body>
+
 </html>

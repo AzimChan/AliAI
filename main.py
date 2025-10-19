@@ -106,6 +106,14 @@ async def get_personal_data_page():
 async def get_auth_page():
     return FileResponse("frontend/auth.html")
 
+@app.get("/personal-plan")
+async def personal_plan():
+    return FileResponse("frontend/personal-plan.html")
+
+@app.get("/statistics")
+async def statistics():
+    return FileResponse("frontend/statistics.html")
+
 # Whisper AI endpoint for voice transcription
 @app.post("/transcribe")
 async def transcribe_voice(audio: UploadFile = File(...)):

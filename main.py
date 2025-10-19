@@ -151,13 +151,13 @@ async def get_ai_response(message: str):
 Сообщение пользователя: "{message}"
 
 Доступные функции для перенаправления:
-1. QR-код генератор (/qr) - создание, генерация QR-кодов
+1. QR-код сканер (/qr) - сканирование QR-кодов
 2. Депозит калькулятор (/deposit) - открытие, создание, оформление депозитов/вкладов
 3. Управление персональными данными (/personal-data) - просмотр, изменение личных данных
 4. Авторизация (/auth) - вход в систему, регистрация
 
 Ответь ТОЛЬКО одним словом:
-- "qr" - если пользователь хочет создать/сгенерировать QR-код
+- "qr" - если пользователь хочет сканировать QR-код
 - "deposit" - если пользователь хочет открыть/создать депозит или вклад
 - "personal" - если пользователь хочет посмотреть/изменить свои данные
 - "auth" - если пользователь хочет войти/зарегистрироваться
@@ -186,7 +186,7 @@ async def get_ai_response(message: str):
             
             # Redirect based on detected intent
             if intent == "qr":
-                return {"response": "Для работы с QR-кодами нажмите кнопку ниже:", "redirect": "/qr", "button": {"text": "Открыть QR-генератор", "url": "/qr", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
+                return {"response": "Для работы с QR-кодами нажмите кнопку ниже:", "redirect": "/qr", "button": {"text": "Открыть QR-сканер", "url": "/qr", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
             elif intent == "deposit":
                 return {"response": "Для открытия депозита нажмите кнопку ниже:", "redirect": "/deposit", "button": {"text": "Калькулятор депозитов", "url": "/deposit", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
             elif intent == "personal":

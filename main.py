@@ -70,6 +70,15 @@ conversation_history = [
 - Ростовщичество (риба)
 - Любые действия, вредящие семье
 
+ФОРМАТИРОВАНИЕ ОТВЕТОВ:
+- Используйте четкую структуру с заголовками и подзаголовками
+- Группируйте информацию по темам
+- Используйте маркированные списки для перечислений
+- Выделяйте ключевые моменты жирным шрифтом
+- Разделяйте длинные ответы на логические блоки
+- Используйте эмодзи для улучшения читаемости (📋, 💡, ⚠️, ✅, ❌)
+- Добавляйте пустые строки между разделами для лучшей читаемости
+
 Помните: ВАША ГЛАВНАЯ ЗАДАЧА - ЗАЩИТИТЬ ЛЮДЕЙ ОТ ОПАСНЫХ РЕШЕНИЙ! Будьте строгими, когда это необходимо для защиты!"""}
 ]
 
@@ -132,24 +141,62 @@ async def transcribe_voice(audio: UploadFile = File(...)):
 @app.get("/chat")
 async def get_ai_response(message: str):
     try:
-        # Check if message contains keywords that should redirect to fake pages
+        # Check if message contains action keywords that should redirect to fake pages
         message_lower = message.lower()
         
-        # Keywords for different fake pages
-        qr_keywords = ['qr', 'кьюар', 'код', 'сканировать', 'сканирование', 'штрих', 'штрихкод']
-        deposit_keywords = ['депозит', 'вклад', 'накопить', 'сбережения', 'процент', 'доходность', 'инвестиции']
-        personal_data_keywords = ['данные', 'персональные', 'информация', 'профиль', 'личные', 'конфиденциальность']
-        auth_keywords = ['войти', 'авторизация', 'логин', 'пароль', 'вход', 'регистрация', 'аккаунт']
-        
-        # Check for redirect keywords
-        if any(keyword in message_lower for keyword in qr_keywords):
-            return {"response": "Для работы с QR-кодами перейдите по ссылке: <a href='/qr' target='_blank' class='text-primary hover:underline'>Открыть QR-генератор</a>", "redirect": "/qr"}
-        elif any(keyword in message_lower for keyword in deposit_keywords):
-            return {"response": "Для открытия депозита перейдите по ссылке: <a href='/deposit' target='_blank' class='text-primary hover:underline'>Калькулятор депозитов</a>", "redirect": "/deposit"}
-        elif any(keyword in message_lower for keyword in personal_data_keywords):
-            return {"response": "Для управления персональными данными перейдите по ссылке: <a href='/personal-data' target='_blank' class='text-primary hover:underline'>Управление данными</a>", "redirect": "/personal-data"}
-        elif any(keyword in message_lower for keyword in auth_keywords):
-            return {"response": "Для авторизации в системе перейдите по ссылке: <a href='/auth' target='_blank' class='text-primary hover:underline'>Вход в систему</a>", "redirect": "/auth"}
+        # Use LLM to detect user intent for feature usage
+        intent_prompt = f"""
+Проанализируй сообщение пользователя и определи, хочет ли он ИСПОЛЬЗОВАТЬ конкретные функции банка или просто спрашивает информацию.
+
+Сообщение пользователя: "{message}"
+
+Доступные функции для перенаправления:
+1. QR-код генератор (/qr) - создание, генерация QR-кодов
+2. Депозит калькулятор (/deposit) - открытие, создание, оформление депозитов/вкладов
+3. Управление персональными данными (/personal-data) - просмотр, изменение личных данных
+4. Авторизация (/auth) - вход в систему, регистрация
+
+Ответь ТОЛЬКО одним словом:
+- "qr" - если пользователь хочет создать/сгенерировать QR-код
+- "deposit" - если пользователь хочет открыть/создать депозит или вклад
+- "personal" - если пользователь хочет посмотреть/изменить свои данные
+- "auth" - если пользователь хочет войти/зарегистрироваться
+- "none" - если пользователь просто спрашивает информацию или задает общие вопросы
+
+Примеры:
+"Хочу открыть депозит" → deposit
+"Создай QR код" → qr
+"Покажи мои данные" → personal
+"Войти в систему" → auth
+"Что такое депозит?" → none
+"Расскажи про QR коды" → none
+"Как работает авторизация?" → none
+"""
+
+        try:
+            # Get intent from AI
+            intent_response = ai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": intent_prompt}],
+                max_tokens=10,
+                temperature=0.1
+            )
+            
+            intent = intent_response.choices[0].message.content.strip().lower()
+            
+            # Redirect based on detected intent
+            if intent == "qr":
+                return {"response": "Для работы с QR-кодами нажмите кнопку ниже:", "redirect": "/qr", "button": {"text": "Открыть QR-генератор", "url": "/qr", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
+            elif intent == "deposit":
+                return {"response": "Для открытия депозита нажмите кнопку ниже:", "redirect": "/deposit", "button": {"text": "Калькулятор депозитов", "url": "/deposit", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
+            elif intent == "personal":
+                return {"response": "Для управления персональными данными нажмите кнопку ниже:", "redirect": "/personal-data", "button": {"text": "Управление данными", "url": "/personal-data", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
+            elif intent == "auth":
+                return {"response": "Для авторизации в системе нажмите кнопку ниже:", "redirect": "/auth", "button": {"text": "Вход в систему", "url": "/auth", "class": "bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"}}
+            
+        except Exception as e:
+            print(f"Intent detection failed: {e}")
+            # Fall through to normal AI response if intent detection fails
         
         # Use the real AI to generate response
         response = generate_sharia_advice(message, conversation_history, ai_client)

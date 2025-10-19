@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR-код - Zaman Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D9A86',
+                        secondary: '#EEFE6D',
+                        accent: '#FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .qr-code {
+            background: linear-gradient(45deg, #2D9A86, #EEFE6D);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .loading-dots {
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0%, 20% { opacity: 0; }
+            50% { opacity: 1; }
+            80%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <i class="fas fa-qrcode text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Zaman Bank</h1>
+                        <p class="text-sm text-gray-500">QR-код генератор</p>
+                    </div>
+                </div>
+                <a href="/" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Назад к чату
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center">
+                <div class="qr-code w-64 h-64 mx-auto rounded-lg flex items-center justify-center mb-6">
+                    <div class="text-center text-white">
+                        <i class="fas fa-qrcode text-6xl mb-4"></i>
+                        <div class="loading-dots">
+                            <span class="text-2xl font-bold">Генерация QR-кода</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4">Пожалуйста, подождите, генерируется ваш персональный QR-код...</p>
+                <div class="flex justify-center space-x-1">
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="successState" class="text-center hidden">
+                <div class="qr-code w-64 h-64 mx-auto rounded-lg flex items-center justify-center mb-6">
+                    <div class="text-center text-white">
+                        <i class="fas fa-check-circle text-6xl mb-4"></i>
+                        <div class="text-2xl font-bold">QR-код готов!</div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">Ваш персональный QR-код для банковских операций успешно сгенерирован.</p>
+                <div class="space-y-4">
+                    <button class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-download mr-2"></i>Скачать QR-код
+                    </button>
+                    <button class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors ml-4">
+                        <i class="fas fa-share mr-2"></i>Поделиться
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="text-center hidden">
+                <div class="w-64 h-64 mx-auto rounded-lg bg-red-100 flex items-center justify-center mb-6">
+                    <div class="text-center text-red-600">
+                        <i class="fas fa-exclamation-triangle text-6xl mb-4"></i>
+                        <div class="text-2xl font-bold">Ошибка</div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">К сожалению, не удалось сгенерировать QR-код. Пожалуйста, попробуйте позже.</p>
+                <button onclick="location.reload()" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <i class="fas fa-refresh mr-2"></i>Попробовать снова
+                </button>
+            </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="mt-8 bg-blue-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-blue-800 mb-4">
+                <i class="fas fa-info-circle mr-2"></i>Информация о QR-кодах
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm text-blue-700">
+                <div>
+                    <h4 class="font-semibold mb-2">Безопасность</h4>
+                    <p>QR-коды защищены современными алгоритмами шифрования</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Использование</h4>
+                    <p>Используйте QR-код для быстрых платежей и переводов</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Срок действия</h4>
+                    <p>QR-код действителен в течение 24 часов</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Поддержка</h4>
+                    <p>При проблемах обращайтесь в службу поддержки</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simulate QR code generation process
+        setTimeout(() => {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('successState').classList.remove('hidden');
+        }, 3000);
+
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate error state after 10 seconds (for demo purposes)
+            setTimeout(() => {
+                if (!document.getElementById('successState').classList.contains('hidden')) {
+                    document.getElementById('successState').classList.add('hidden');
+                    document.getElementById('errorState').classList.remove('hidden');
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

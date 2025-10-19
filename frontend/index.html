@@ -21,8 +21,101 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --header-height: 60px;
+            --recommendations-height: 30px;
+            --input-height: 60px;
+            --typing-indicator-height: 40px;
+            --padding-vertical: 8px;
+            --padding-horizontal: 8px;
+        }
+
         .chat-container {
-            height: calc(100vh - 120px);
+            height: calc(100vh - var(--header-height) - var(--recommendations-height) - var(--input-height) - var(--typing-indicator-height) - var(--padding-vertical) * 2);
+            min-height: 200px;
+        }
+
+        /* Responsive breakpoints */
+        @media (max-width: 1024px) {
+            :root {
+                --recommendations-height: 25px;
+                --input-height: 50px;
+                --typing-indicator-height: 35px;
+                --padding-vertical: 6px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 50px;
+                --recommendations-height: 20px;
+                --input-height: 40px;
+                --typing-indicator-height: 30px;
+                --padding-vertical: 4px;
+                --padding-horizontal: 6px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                --header-height: 40px;
+                --recommendations-height: 15px;
+                --input-height: 30px;
+                --typing-indicator-height: 25px;
+                --padding-vertical: 2px;
+                --padding-horizontal: 4px;
+            }
+            
+            main {
+                padding: var(--padding-vertical) var(--padding-horizontal);
+            }
+            
+            #recommendedPrompts {
+                padding: 0.25rem;
+            }
+            
+            .prompt-card {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 35px;
+                --recommendations-height: 12px;
+                --input-height: 25px;
+                --typing-indicator-height: 20px;
+                --padding-vertical: 1px;
+                --padding-horizontal: 2px;
+            }
+        }
+
+        /* Utility classes for scalability */
+        .flexible-spacing {
+            margin-top: calc(var(--padding-vertical) / 2);
+        }
+
+        .flexible-padding {
+            padding: var(--padding-vertical) var(--padding-horizontal);
+        }
+
+        .flexible-height {
+            height: calc(100vh - var(--header-height) - var(--recommendations-height) - var(--input-height) - var(--padding-vertical) * 2);
+            min-height: 300px;
+        }
+
+        /* Future-proof grid system */
+        .scalable-grid {
+            display: grid;
+            gap: 0.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        @media (max-width: 640px) {
+            .scalable-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .message-bubble {
@@ -53,6 +146,144 @@
                 transform: translateY(0);
             }
         }
+
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #2D9A86;
+            animation: typing 0.05s steps(1, end), blink-caret 1s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #2D9A86; }
+        }
+
+        .text-reveal {
+            opacity: 0;
+            animation: textReveal 0.5s ease-in-out forwards;
+        }
+
+        @keyframes textReveal {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-container {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: messageSlideIn 0.4s ease-out forwards;
+        }
+
+        @keyframes messageSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Heading styles for AI responses */
+        .prose h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2D9A86;
+            margin: 1rem 0 0.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #2D9A86;
+            line-height: 1.2;
+        }
+        
+        .prose h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2D9A86;
+            margin: 0.875rem 0 0.5rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid #2D9A86;
+            line-height: 1.3;
+        }
+        
+        .prose h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #374151;
+            margin: 0.75rem 0 0.375rem 0;
+            padding-left: 0.5rem;
+            border-left: 4px solid #2D9A86;
+            line-height: 1.4;
+        }
+        
+        .prose h4 {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #4B5563;
+            margin: 0.625rem 0 0.25rem 0;
+            padding-left: 0.25rem;
+            border-left: 2px solid #2D9A86;
+            line-height: 1.4;
+        }
+        
+        .prose b {
+            font-weight: bold;
+            color: #1F2937;
+        }
+        
+        /* List styling for AI responses */
+        .prose ul {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+            list-style-type: disc;
+        }
+        
+        .prose ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+            list-style-type: decimal;
+        }
+        
+        .prose li {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+            padding-left: 0.25rem;
+        }
+        
+        .prose ul li {
+            list-style-type: disc;
+            color: #374151;
+        }
+        
+        .prose ol li {
+            list-style-type: decimal;
+            color: #374151;
+        }
+        
+        /* Nested list styling */
+        .prose ul ul,
+        .prose ol ol,
+        .prose ul ol,
+        .prose ol ul {
+            margin: 0.25rem 0;
+            padding-left: 1rem;
+        }
+        
+        .prose ul ul li {
+            list-style-type: circle;
+        }
+        
+        .prose ul ul ul li {
+            list-style-type: square;
+        }
     </style>
 </head>
 
@@ -81,12 +312,14 @@
     </header>
 
     <!-- Chat Container -->
-    <main class="max-w-4xl mx-auto px-4 py-6">
+    <main class="max-w-4xl mx-auto" style="padding: var(--padding-vertical) var(--padding-horizontal);">
         <div id="chatContainer"
-            class="chat-container bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            class="chat-container bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flexible-height">
+            
+            
             <div id="messages" class="h-full overflow-y-auto p-4 space-y-4">
                 <!-- Welcome Message -->
-                <div class="message-bubble fade-in">
+                <div class="message-bubble message-container">
                     <div class="flex items-start space-x-3">
                         <div
                             class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0">
@@ -104,37 +337,52 @@
 
         <!-- Typing Indicator -->
         <div id="typingIndicator"
-            class="typing-indicator bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-4">
-            <div class="flex items-center space-x-3">
+            class="typing-indicator bg-white rounded-lg shadow-sm border border-gray-200 p-2" style="margin-top: calc(var(--padding-vertical) / 4);">
+            <div class="flex items-center space-x-2">
                 <div
-                    class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
-                    <i class="fas fa-robot text-white text-sm"></i>
+                    class="w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                    <i class="fas fa-robot text-white text-xs"></i>
                 </div>
-                <div class="bg-gray-100 rounded-lg p-3">
+                <div class="bg-gray-100 rounded-lg p-2">
                     <div class="flex space-x-1">
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s">
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s">
                         </div>
-                        <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s">
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Recommended Prompts -->
+        <div id="recommendedPrompts" class="px-2 py-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
+                <button class="prompt-card bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs transition-colors duration-200 border border-gray-200 hover:border-gray-300" data-prompt="Создай персональный финансовый план">
+                    Создай персональный финансовый план
+                </button>
+                <button class="prompt-card bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs transition-colors duration-200 border border-gray-200 hover:border-gray-300" data-prompt="Сделай анализ доходов и расходов">
+                    Сделай анализ доходов и расходов
+                </button>
+                <button class="prompt-card bg-gray-50 hover:bg-gray-100 text-gray-700 px-2 py-1 rounded-lg text-xs transition-colors duration-200 border border-gray-200 hover:border-gray-300" data-prompt="Что такое депозит?">
+                    Что такое депозит?
+                </button>
+            </div>
+        </div>
+
         <!-- Input Area -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mt-4">
-            <div class="flex space-x-3">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-2" style="margin-top: calc(var(--padding-vertical) / 4);">
+            <div class="flex space-x-2">
                 <input type="text" id="messageInput" placeholder="Type your message here..."
-                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     autocomplete="off">
                 <button id="voiceButton"
-                    class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Voice input">
                     <i class="fas fa-microphone"></i>
                 </button>
                 <button id="sendButton"
-                    class="px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -173,6 +421,16 @@
                     }
                 });
                 this.clearButton.addEventListener('click', () => this.clearChat());
+                
+                // Add event listeners for recommended prompts
+                document.querySelectorAll('.prompt-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const prompt = card.getAttribute('data-prompt');
+                        this.messageInput.value = prompt;
+                        this.sendMessage();
+                        this.hideRecommendedPrompts();
+                    });
+                });
             }
 
             initializeVoiceRecognition() {
@@ -193,17 +451,106 @@
                 this.setTyping(true);
 
                 try {
-                    // Simulate AI response - replace with actual API call
-                    const response = await this.getAIResponse(message);
-                    this.addMessage(response, 'ai');
+                    // Get AI response with potential button
+                    const aiData = await this.getAIResponse(message);
+                    this.addMessage(aiData.response, 'ai', aiData.button, true); // Enable animation for AI responses
                 } catch (error) {
-                    this.addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                    this.addMessage('Sorry, I encountered an error. Please try again.', 'ai', null, true);
                 } finally {
                     this.setTyping(false);
                 }
             }
 
-            addMessage(text, sender) {
+            // Convert markdown-style formatting to HTML elements
+            convertMarkdownToHtml(text) {
+                let html = text;
+                
+                // Convert headings
+                html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
+                html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+                html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+                html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+                
+                // Convert bold text
+                html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                
+                // Convert ordered lists (1., 2., 3., etc.)
+                html = html.replace(/^(\d+)\.\s+(.*)$/gm, '<li>$2</li>');
+                
+                // Convert unordered lists (- and *)
+                html = html.replace(/^[-*]\s+(.*)$/gm, '<li>$1</li>');
+                
+                // Wrap consecutive list items in proper list tags
+                html = this.wrapListItems(html);
+                
+                return html;
+            }
+            
+            // Helper function to wrap consecutive list items in proper list tags
+            wrapListItems(html) {
+                // Split by lines to process line by line
+                const lines = html.split('\n');
+                const result = [];
+                let inOrderedList = false;
+                let inUnorderedList = false;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    const trimmedLine = line.trim();
+                    
+                    // Check if this line is a list item
+                    const isOrderedItem = trimmedLine.startsWith('<li>') && /^\d+\./.test(lines[i].replace(/<li>/, '').trim());
+                    const isUnorderedItem = trimmedLine.startsWith('<li>') && !isOrderedItem;
+                    
+                    if (isOrderedItem) {
+                        if (!inOrderedList) {
+                            // Close unordered list if we were in one
+                            if (inUnorderedList) {
+                                result.push('</ul>');
+                                inUnorderedList = false;
+                            }
+                            result.push('<ol>');
+                            inOrderedList = true;
+                        }
+                        result.push(line);
+                    } else if (isUnorderedItem) {
+                        if (!inUnorderedList) {
+                            // Close ordered list if we were in one
+                            if (inOrderedList) {
+                                result.push('</ol>');
+                                inOrderedList = false;
+                            }
+                            result.push('<ul>');
+                            inUnorderedList = true;
+                        }
+                        result.push(line);
+                    } else {
+                        // Close any open lists
+                        if (inOrderedList) {
+                            result.push('</ol>');
+                            inOrderedList = false;
+                        }
+                        if (inUnorderedList) {
+                            result.push('</ul>');
+                            inUnorderedList = false;
+                        }
+                        result.push(line);
+                    }
+                }
+                
+                // Close any remaining open lists
+                if (inOrderedList) {
+                    result.push('</ol>');
+                }
+                if (inUnorderedList) {
+                    result.push('</ul>');
+                }
+                
+                return result.join('\n');
+            }
+
+            addMessage(text, sender, button = null, animate = false) {
+                
                 const messageId = Date.now();
                 const timeString = new Date().toLocaleTimeString([], {
                     hour: '2-digit',
@@ -211,21 +558,120 @@
                 });
 
                 const messageElement = document.createElement('div');
-                messageElement.className = 'message-bubble fade-in';
+                messageElement.className = 'message-bubble message-container';
+                
+                // Convert markdown to HTML for AI messages
+                const displayText = sender === 'ai' ? this.convertMarkdownToHtml(text) : text;
+                
+                // Calculate adaptive delays based on text length
+                let buttonDelay, timestampDelay;
+                if (text.length <= 50) {
+                    buttonDelay = text.length * 20; // Normal delay
+                    timestampDelay = text.length * 20 + 500;
+                } else if (text.length <= 200) {
+                    buttonDelay = text.length * 10; // Faster delay
+                    timestampDelay = text.length * 10 + 500;
+                } else if (text.length <= 500) {
+                    buttonDelay = text.length * 8; // Moderate delay
+                    timestampDelay = text.length * 8 + 500;
+                } else if (text.length <= 1000) {
+                    buttonDelay = text.length * 3; // Fast delay
+                    timestampDelay = text.length * 3 + 500;
+                } else {
+                    buttonDelay = text.length * 1; // Very fast delay
+                    timestampDelay = text.length * 1 + 500;
+                }
+
+                // Create button HTML if button data is provided
+                let buttonHtml = '';
+                if (button) {
+                    buttonHtml = `
+                        <div class="mt-3 opacity-0" style="animation-delay: ${buttonDelay}ms; animation: textReveal 0.5s ease-in-out forwards;">
+                            <button onclick="window.open('${button.url}', '_blank')" class="${button.class}">
+                                <i class="fas fa-external-link-alt mr-2"></i>${button.text}
+                            </button>
+                        </div>
+                    `;
+                }
+                
                 messageElement.innerHTML = `
                     <div class="flex items-start space-x-3 ${sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''}">
                         <div class="w-8 h-8 ${sender === 'user' ? 'bg-gray-500' : 'bg-gradient-to-r from-primary to-secondary'} rounded-full flex items-center justify-center flex-shrink-0">
                             <i class="fas ${sender === 'user' ? 'fa-user' : 'fa-robot'} text-white text-sm"></i>
                         </div>
                         <div class="bg-${sender === 'user' ? 'primary' : 'gray-100'} text-${sender === 'user' ? 'white' : 'gray-800'} rounded-lg p-3 message-bubble">
-                            <div class="prose prose-sm max-w-none">${text}</div>
-                            <span class="text-xs ${sender === 'user' ? 'text-blue-100' : 'text-gray-500'} mt-1 block">${timeString}</span>
+                            <div class="prose prose-sm max-w-none" id="message-${messageId}">${animate ? '' : displayText}</div>
+                            ${buttonHtml}
+                            <span class="text-xs ${sender === 'user' ? 'text-blue-100' : 'text-gray-500'} mt-1 block opacity-0" style="animation-delay: ${timestampDelay}ms; animation: textReveal 0.5s ease-in-out forwards;">${timeString}</span>
                         </div>
                     </div>
                 `;
 
                 this.messagesContainer.appendChild(messageElement);
                 this.scrollToBottom();
+
+                // Start typing animation if requested
+                if (animate && sender === 'ai') {
+                    this.typeText(messageId, displayText);
+                } else if (sender === 'ai') {
+                    // Show prompts immediately if no animation
+                    this.showRecommendedPrompts();
+                }
+            }
+
+            typeText(messageId, htmlText) {
+                const messageElement = document.getElementById(`message-${messageId}`);
+                if (!messageElement) return;
+
+                // Adaptive typing speed based on text length (use original text length for speed calculation)
+                let typingSpeed;
+                if (htmlText.length <= 50) {
+                    // Short responses: normal speed (20ms per character)
+                    typingSpeed = 20;
+                } else if (htmlText.length <= 200) {
+                    // Medium responses: faster (10ms per character)
+                    typingSpeed = 10;
+                } else if (htmlText.length <= 500) {
+                    // Long responses: moderate speed (8ms per character)
+                    typingSpeed = 8;
+                } else if (htmlText.length <= 1000) {
+                    // Very long responses: fast speed (3ms per character)
+                    typingSpeed = 3;
+                } else {
+                    // Extremely long responses: very fast speed (1ms per character)
+                    typingSpeed = 1;
+                }
+
+                // For extremely long responses (>2000 chars), skip animation and show immediately
+                if (htmlText.length > 2000) {
+                    messageElement.innerHTML = htmlText;
+                    messageElement.style.borderRight = 'none';
+                    this.scrollToBottom();
+                    // Show recommended prompts after immediate display
+                    this.showRecommendedPrompts();
+                    return;
+                }
+
+                let index = 0;
+                
+                const typeChar = () => {
+                    if (index < htmlText.length) {
+                        const currentText = htmlText.substring(0, index + 1);
+                        messageElement.innerHTML = currentText;
+                        index++;
+                        setTimeout(typeChar, typingSpeed);
+                        this.scrollToBottom();
+                    } else {
+                        // Remove typing cursor after completion
+                        messageElement.style.borderRight = 'none';
+                        // Show recommended prompts after typing animation completes
+                        this.showRecommendedPrompts();
+                    }
+                };
+
+                // Start typing animation with shorter delay for long responses
+                const startDelay = htmlText.length > 500 ? 10 : 100;
+                setTimeout(typeChar, startDelay);
             }
 
             setTyping(typing) {
@@ -245,16 +691,16 @@
                     // Call the real AI API endpoint
                     const response = await fetch(`/chat?message=${encodeURIComponent(message)}`);
                     const data = await response.json();
-                    return data.response;
+                    return {response: data.response, button: data.button};
                 } catch (error) {
                     console.error('Error calling AI API:', error);
-                    return 'Извините, произошла ошибка при получении ответа. Пожалуйста, попробуйте еще раз.';
+                    return {response: 'Извините, произошла ошибка при получении ответа. Пожалуйста, попробуйте еще раз.', button: null};
                 }
             }
 
             clearChat() {
                 this.messagesContainer.innerHTML = `
-                    <div class="message-bubble fade-in">
+                    <div class="message-bubble message-container">
                         <div class="flex items-start space-x-3">
                             <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-robot text-white text-sm"></i>
@@ -267,6 +713,21 @@
                     </div>
                 `;
                 this.messages = [];
+                this.showRecommendedPrompts();
+            }
+            
+            hideRecommendedPrompts() {
+                const recommendedPrompts = document.getElementById('recommendedPrompts');
+                if (recommendedPrompts) {
+                    recommendedPrompts.style.display = 'none';
+                }
+            }
+            
+            showRecommendedPrompts() {
+                const recommendedPrompts = document.getElementById('recommendedPrompts');
+                if (recommendedPrompts) {
+                    recommendedPrompts.style.display = 'block';
+                }
             }
 
             scrollToBottom() {

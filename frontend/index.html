@@ -307,6 +307,33 @@
                     title="Clear conversation">
                     <i class="fas fa-trash-alt"></i>
                 </button>
+                
+                <!-- Collapsible Menu Button -->
+                <div class="relative">
+                    <button id="menuButton"
+                        class="p-2 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                        title="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden">
+                        <button class="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 transition-colors duration-200 flex items-center space-x-3" onclick="createPersonalPlan()">
+                            <i class="fas fa-user-plus text-primary"></i>
+                            <div>
+                                <div class="font-semibold">Создать персональный план</div>
+                                <div class="text-sm text-gray-500">Составьте индивидуальный финансовый план</div>
+                            </div>
+                        </button>
+                        <button class="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 transition-colors duration-200 flex items-center space-x-3" onclick="viewStatistics()">
+                            <i class="fas fa-chart-bar text-primary"></i>
+                            <div>
+                                <div class="font-semibold">Общая статистика</div>
+                                <div class="text-sm text-gray-500">Просмотрите ваши финансовые показатели</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -431,6 +458,24 @@
                         this.hideRecommendedPrompts();
                     });
                 });
+                
+                // Add event listeners for menu
+                const menuButton = document.getElementById('menuButton');
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                
+                if (menuButton && dropdownMenu) {
+                    menuButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        dropdownMenu.classList.toggle('hidden');
+                    });
+                    
+                    // Close menu when clicking outside
+                    document.addEventListener('click', (e) => {
+                        if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+                }
             }
 
             initializeVoiceRecognition() {
@@ -842,6 +887,15 @@
                     this.voiceButton.disabled = false;
                 }
             }
+        }
+
+        // Global functions for menu options
+        function createPersonalPlan() {
+            window.location.href = '/personal-plan';
+        }
+        
+        function viewStatistics() {
+            window.location.href = '/statistics';
         }
 
         // Initialize chatbot when page loads
